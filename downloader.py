@@ -2,12 +2,12 @@
 '''
 
 import os
+import time
 import requests
 from tqdm import tqdm
 
-
 # File with URLs to be downloaded (None to ignore)
-URLS_FILE = None
+URLS_FILE = ""
 # URL list (or comprehension) to be downloaded (None to ignore)
 URLS_LIST = None
 
@@ -17,6 +17,9 @@ RESULT_FOLDER = "raw_data"
 UA_STRING = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) ' + \
             'AppleWebKit/537.36 (KHTML, like Gecko) ' + \
             'Chrome/109.0.0.0 Safari/537.36'
+# Pause between requests
+PAUSE = 1
+
 
 def load_urls(filename):
     ''' Load and return the raw list of URLs
@@ -56,6 +59,7 @@ def do_the_download(url, path):
     the_request = requests.get(url, headers=headers)
     with open(path, "w", encoding="utf-8") as outfile:
         outfile.write(the_request.text)
+    time.sleep(PAUSE)
 
 def main():
     ''' Do the downloading
