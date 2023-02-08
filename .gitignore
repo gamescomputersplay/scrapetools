@@ -5,3 +5,5 @@
 !.gitignore
 !downloader.py
 !downloader_usage.py
+!yp_generate_urls.py
+!yp_cities.txt
