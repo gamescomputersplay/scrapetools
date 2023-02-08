@@ -3,8 +3,9 @@
 
 import os
 import time
-import requests
 import concurrent.futures
+
+import requests
 
 
 class Downloader:
@@ -131,7 +132,7 @@ class Downloader:
             url, path = data
 
             headers = {'User-agent': self.user_agent}
-            the_request = requests.get(url, headers=headers)
+            the_request = requests.get(url, headers=headers, timeout=10)
             with open(path, "w", encoding="utf-8") as outfile:
                 outfile.write(the_request.text)
 
