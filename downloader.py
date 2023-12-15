@@ -17,6 +17,7 @@ class Downloader:
                  urls_list=None,
                  target_folder="downloaded_data",
                  user_agent=None,
+                 cookies=None,
                  pause=0,
                  threads=1):
 
@@ -41,6 +42,12 @@ class Downloader:
                               'Chrome/109.0.0.0 Safari/537.36'
         else:
             self.user_agent = user_agent
+
+        # Cookies (a dict)
+        if cookies is None:
+            self.cookies = {}
+        else:
+            self.cookies = cookies
 
         # Pause between requests
         self.pause = pause
@@ -132,7 +139,7 @@ class Downloader:
             url, path = data
 
             headers = {'User-agent': self.user_agent}
-            the_request = requests.get(url, headers=headers, timeout=10)
+            the_request = requests.get(url, headers=headers, cookies=self.cookies, timeout=10)
             with open(path, "w", encoding="utf-8") as outfile:
                 outfile.write(the_request.text)
 
