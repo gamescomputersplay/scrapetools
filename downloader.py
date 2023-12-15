@@ -151,7 +151,7 @@ class Downloader:
             eta = (elapsed / self.completed_tasks) * self.total_tasks
 
             print(f"[{self.completed_tasks}/{self.total_tasks}, " +
-                  f"{time_format(elapsed)}/{time_format(eta)}]: {url}")
+                  f"{time_format(elapsed)}/{time_format(eta)}, {len(the_request.text)}]: {url}")
 
         # Create target folder if it doesn't exist
         if not os.path.exists(f"./{self.target_folder}"):
