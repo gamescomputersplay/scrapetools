@@ -143,8 +143,6 @@ class Downloader:
             with open(path, "w", encoding="utf-8") as outfile:
                 outfile.write(the_request.text)
 
-            time.sleep(self.pause)
-
             # Update the number of complete tasks, calculate ETA
             self.completed_tasks += 1
             elapsed = time.time() - self.start_time
@@ -152,6 +150,8 @@ class Downloader:
 
             print(f"[{self.completed_tasks}/{self.total_tasks}, " +
                   f"{time_format(elapsed)}/{time_format(eta)}, {len(the_request.text)}]: {url}")
+
+            time.sleep(self.pause)
 
         # Create target folder if it doesn't exist
         if not os.path.exists(f"./{self.target_folder}"):
