@@ -18,6 +18,7 @@ class Downloader:
                  target_folder="downloaded_data",
                  user_agent=None,
                  cookies=None,
+                 binary=False,
                  pause=0,
                  threads=1):
 
@@ -48,6 +49,9 @@ class Downloader:
             self.cookies = {}
         else:
             self.cookies = cookies
+
+        # Binary mode (for images, etc.)
+        self.binary = binary
 
         # Pause between requests
         self.pause = pause
@@ -140,8 +144,15 @@ class Downloader:
 
             headers = {'User-agent': self.user_agent}
             the_request = requests.get(url, headers=headers, cookies=self.cookies, timeout=10)
-            with open(path, "w", encoding="utf-8") as outfile:
-                outfile.write(the_request.text)
+
+            if self.binary:
+                with open(path, "wb") as outfile:
+                    outfile.write(the_request.content)
+            else:
+                with open(path, "w", encoding="utf-8") as outfile:
+                    outfile.write(the_request.text)
+
+
 
             # Update the number of complete tasks, calculate ETA
             self.completed_tasks += 1
