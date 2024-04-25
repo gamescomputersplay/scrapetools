@@ -19,6 +19,7 @@ class Downloader:
                  user_agent=None,
                  cookies=None,
                  binary=False,
+                 path_in_filename=True,
                  pause=0,
                  threads=1):
 
@@ -32,6 +33,9 @@ class Downloader:
 
         # This list will contain "download tasks" as [(url, filepath), ...]
         self.download_list = []
+
+        # Whether to use a full path in the filename
+        self.path_in_filename = path_in_filename
 
         # Initiate the download_list
         self.compile_download_list(urls_filename, urls_list)
@@ -81,16 +85,28 @@ class Downloader:
             - replace /, &, ? with hyphens
             '''
             filepaths = []
-            for url in list_of_urls:
-                filename = url.replace("http://", "").replace("https://", "")
-                filename = filename.replace("?", "-").replace("&", "-")
-                filename = "-".join(filename.split("/")[1:])
+            for line_n, url in enumerate(list_of_urls):
+
+                # Generate resulting filenames
+                # Either from the full path
+                if self.path_in_filename:
+                    filename = url.replace("http://", "").replace("https://", "")
+                    filename = filename.replace("?", "-").replace("&", "-")
+                    filename = "-".join(filename.split("/")[1:])
+                # Or just the filename
+                else:
+                    filename = url.split("/")[-1]
+                    # Make it work even if it is just folders
+                    if filename == "":
+                        filename = f"_default_{line_n}"
+
                 filepath = f"./{self.target_folder}/{filename}"
                 filepaths.append(filepath)
             return filepaths
 
         def compile_download_list():
             ''' Prepare a download list: a list of tuples (url, urls_filename)
+            Ignore files that already exist
             '''
             download_list = []
             for url, path in zip(list_of_urls, list_of_filepaths):
