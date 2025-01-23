@@ -18,6 +18,7 @@ class Downloader:
                  target_folder="downloaded_data",
                  user_agent=None,
                  cookies=None,
+                 headers=None,
                  binary=False,
                  path_in_filename=True,
                  pause=0,
@@ -53,6 +54,13 @@ class Downloader:
             self.cookies = {}
         else:
             self.cookies = cookies
+
+        # Headers
+        if headers is None:
+            self.headers = {}
+        else:
+            self.headers = headers
+        self.headers["User-agent"] = self.user_agent
 
         # Binary mode (for images, etc.)
         self.binary = binary
@@ -158,8 +166,7 @@ class Downloader:
 
             url, path = data
 
-            headers = {'User-agent': self.user_agent}
-            the_request = requests.get(url, headers=headers, cookies=self.cookies, timeout=10)
+            the_request = requests.get(url, headers=self.headers, cookies=self.cookies, timeout=10)
 
             if self.binary:
                 with open(path, "wb") as outfile:
